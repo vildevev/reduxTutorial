@@ -24,13 +24,11 @@
 }
 
 // Pure function: return value depends solely on the input. Doesn't modify the input.
-
 function square(x) {
 	return x * x;
 }
 
 // Impure functions:
-
 function square(x) {
 	updateXInDatabase(x);
 	return x = x * x;
@@ -39,3 +37,42 @@ function square(x) {
 // State mutations need to be pure functions.
 
 // Reducers take the state, only modifies the neccessary piece, and sets the state equal to a copy of the previous one with the implemented changes. 
+
+const counter(state = 0, action) => {
+	switch (action.type) {
+		case 'INCREMENT':
+			return state + 1;
+		case 'DECREMENT':
+			return state - 1;
+		default:
+			return state;
+	}
+}
+
+// The Redux store:
+// 1. Holds the current application state object 
+// 2. Let's you dispatch actions
+// 3. Specify the reducer that tells how the state is updated with actions
+
+const createStore = (reducer) => {
+	let state;
+	let listeners = [];
+
+	const getState = () => state;
+
+	const dispatch = (action) => {
+		state = reducerr(state, action);
+		listeners.forEach(listener => listener());
+	};
+
+	const subscribe = (listener) => {
+		listeners.push(listener);
+		return () => {
+			listeners = listeners.filter(l => l !== listener);
+		};
+	};
+
+	dispatch({});
+
+	return { getState, dispatch, subscribe };
+};
